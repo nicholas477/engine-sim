@@ -32,6 +32,7 @@ namespace es_script {
         static Output *output();
 
         void initialize();
+        void addSearchPath(const piranha::IrPath& path);
         bool compile(const piranha::IrPath &path);
         Output execute();
         void destroy();

@@ -48,7 +48,7 @@ Simulator::~Simulator() {
     assert(m_system == nullptr);
     assert(m_exhaustFlowStagingBuffer == nullptr);
     assert(m_delayFilters == nullptr);
-    assert(m_antialiasingFilters == nullptr);
+    //assert(m_antialiasingFilters == nullptr);
     assert(m_dynoTorqueSamples == nullptr);
 }
 
@@ -211,6 +211,7 @@ void Simulator::loadSimulation(Engine *engine, Vehicle *vehicle, Transmission *t
     }
 
     m_dyno.connectCrankshaft(m_engine->getOutputCrankshaft());
+    //m_dyno.connectBody(&m_vehicleMass);
     m_system->addConstraint(&m_dyno);
 
     m_starterMotor.connectCrankshaft(m_engine->getOutputCrankshaft());
