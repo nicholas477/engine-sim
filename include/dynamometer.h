@@ -19,6 +19,7 @@ class Dynamometer : public atg_scs::Constraint {
         double m_ks;
         double m_kd;
         double m_maxTorque;
+        double m_clutchPressure;
 
         bool m_hold;
         bool m_enabled;

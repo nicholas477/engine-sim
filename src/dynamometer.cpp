@@ -9,6 +9,7 @@ Dynamometer::Dynamometer() : atg_scs::Constraint(1, 1) {
     m_ks = 10.0;
     m_kd = 1.0;
     m_maxTorque = units::torque(1000.0, units::ft_lb);
+    m_clutchPressure = 1.0;
 
     m_enabled = false;
     m_hold = false;
@@ -54,13 +55,13 @@ void Dynamometer::calculate(Output *output, atg_scs::SystemState *state) {
 
     if (m_bodies[0]->v_theta < 0) {
         output->v_bias[0] = m_rotationSpeed;
-        output->limits[0][0] = m_enabled ? -m_maxTorque : 0.0;
-        output->limits[0][1] = m_enabled ? m_maxTorque : 0.0;
+        output->limits[0][0] = m_enabled ? -m_maxTorque * m_clutchPressure : 0.0;
+        output->limits[0][1] = m_enabled ? m_maxTorque * m_clutchPressure : 0.0;
     }
     else {
         output->v_bias[0] = -m_rotationSpeed;
-        output->limits[0][0] = m_enabled ? -m_maxTorque : 0.0;
-        output->limits[0][1] = m_enabled ? m_maxTorque : 0.0;
+        output->limits[0][0] = m_enabled ? -m_maxTorque * m_clutchPressure : 0.0;
+        output->limits[0][1] = m_enabled ? m_maxTorque * m_clutchPressure : 0.0;
     }
 }
 
