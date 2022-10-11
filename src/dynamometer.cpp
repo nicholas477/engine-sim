@@ -8,7 +8,8 @@ Dynamometer::Dynamometer() : atg_scs::Constraint(1, 1) {
     m_rotationSpeed = 0.0;
     m_ks = 10.0;
     m_kd = 1.0;
-    m_maxTorque = units::torque(10000.0, units::ft_lb);
+    m_maxTorque = units::torque(1000.0, units::ft_lb);
+    m_clutchPressure = 1.0;
 
     m_enabled = false;
     m_hold = false;
@@ -20,6 +21,11 @@ Dynamometer::~Dynamometer() {
 
 void Dynamometer::connectCrankshaft(Crankshaft *crankshaft) {
     m_bodies[0] = &crankshaft->m_body;
+}
+
+void Dynamometer::connectBody(atg_scs::RigidBody* body)
+{
+    m_bodies[0] = body;
 }
 
 void Dynamometer::calculate(Output *output, atg_scs::SystemState *state) {
@@ -36,15 +42,26 @@ void Dynamometer::calculate(Output *output, atg_scs::SystemState *state) {
 
     output->C[0] = 0;
 
+    //if (m_bodies[0]->v_theta < 0) {
+    //    output->v_bias[0] = m_rotationSpeed;
+    //    output->limits[0][0] = (m_hold && m_enabled) ? -m_maxTorque : 0.0;
+    //    output->limits[0][1] = m_enabled ? m_maxTorque : 0.0;
+    //}
+    //else {
+    //    output->v_bias[0] = -m_rotationSpeed;
+    //    output->limits[0][0] = m_enabled ? -m_maxTorque : 0.0;
+    //    output->limits[0][1] = (m_hold && m_enabled) ? m_maxTorque : 0.0;
+    //}
+
     if (m_bodies[0]->v_theta < 0) {
         output->v_bias[0] = m_rotationSpeed;
-        output->limits[0][0] = (m_hold && m_enabled) ? -m_maxTorque : 0.0;
-        output->limits[0][1] = m_enabled ? m_maxTorque : 0.0;
+        output->limits[0][0] = m_enabled ? -m_maxTorque * m_clutchPressure : 0.0;
+        output->limits[0][1] = m_enabled ? m_maxTorque * m_clutchPressure : 0.0;
     }
     else {
         output->v_bias[0] = -m_rotationSpeed;
-        output->limits[0][0] = m_enabled ? -m_maxTorque : 0.0;
-        output->limits[0][1] = (m_hold && m_enabled) ? m_maxTorque : 0.0;
+        output->limits[0][0] = m_enabled ? -m_maxTorque * m_clutchPressure : 0.0;
+        output->limits[0][1] = m_enabled ? m_maxTorque * m_clutchPressure : 0.0;
     }
 }
 

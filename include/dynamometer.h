@@ -11,6 +11,7 @@ class Dynamometer : public atg_scs::Constraint {
         virtual ~Dynamometer();
 
         void connectCrankshaft(Crankshaft *crankshaft);
+        void connectBody(atg_scs::RigidBody* body);
         virtual void calculate(Output *output, atg_scs::SystemState *state);
         double getTorque() const;
 
@@ -18,6 +19,7 @@ class Dynamometer : public atg_scs::Constraint {
         double m_ks;
         double m_kd;
         double m_maxTorque;
+        double m_clutchPressure;
 
         bool m_hold;
         bool m_enabled;
