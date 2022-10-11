@@ -1,5 +1,3 @@
-#include "..\include\simulator.h"
-#include "..\include\simulator.h"
 #include "../include/simulator.h"
 
 #include "../include/constants.h"
@@ -53,7 +51,7 @@ Simulator::~Simulator() {
 }
 
 void Simulator::initialize(const Parameters &params) {
-    if (params.SystemType == SystemType::NsvOptimized) {
+    if (params.systemType == SystemType::NsvOptimized) {
         atg_scs::OptimizedNsvRigidBodySystem *system =
             new atg_scs::OptimizedNsvRigidBodySystem;
         system->initialize(
@@ -414,7 +412,7 @@ bool Simulator::simulateStep() {
     }
 
     const int index =
-        static_cast<int>(std::floor(DynoTorqueSamples * outputShaft->getCycleAngle() / (4 * constants::pi)));
+        static_cast<int>(std::floor((DynoTorqueSamples - 1) * outputShaft->getCycleAngle() / (4 * constants::pi)));
     const int step = m_engine->isSpinningCw() ? 1 : -1;
     m_dynoTorqueSamples[index] = m_dyno.getTorque();
 

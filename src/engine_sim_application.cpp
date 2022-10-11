@@ -464,7 +464,7 @@ void EngineSimApplication::loadEngine(
     m_simulator.setSimulationFrequency(engine->getSimulationFrequency());
 
     Simulator::Parameters simulatorParams;
-    simulatorParams.SystemType = Simulator::SystemType::NsvOptimized;
+    simulatorParams.systemType = Simulator::SystemType::NsvOptimized;
     m_simulator.initialize(simulatorParams);
     m_simulator.loadSimulation(engine, vehicle, transmission);
 
@@ -477,7 +477,7 @@ void EngineSimApplication::loadEngine(
     for (int i = 0; i < engine->getExhaustSystemCount(); ++i) {
         ImpulseResponse *response = engine->getExhaustSystem(i)->getImpulseResponse();
 
-        ysWindowsAudioWaveFile waveFile;
+        ysAudioWaveFile waveFile;
         waveFile.OpenFile(response->getFilename().c_str());
         waveFile.InitializeInternalBuffer(waveFile.GetSampleCount());
         waveFile.FillBuffer(0);

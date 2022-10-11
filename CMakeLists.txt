@@ -1,10 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
 
+include(CMakeDependentOption)
+
 option(DTV "Enable video output" OFF)
 option(PIRANHA_ENABLED "Enable scripting input" ON)
-option(DISCORD_ENABLED "Enable Discord Rich Presence" ON)
+cmake_dependent_option(DISCORD_ENABLED "Enable Discord Rich Presence" ON WIN32 OFF)
 option(BUILD_APP "Build Application" ON)
 option(BUILD_APP_LIB "Build the application library. This library includes the visualization and simulation setup." ON)
+# Default to compiling as Release in single-configuration generators
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type" FORCE)
+endif()
 
 if (DTV)
     add_compile_definitions(ATG_ENGINE_SIM_VIDEO_CAPTURE)
@@ -318,6 +324,13 @@ if (BUILD_APP)
 		engine-sim-app-lib
 	)
 endif (BUILD_APP)
+
+if (DISCORD_ENABLED)
+    target_link_libraries(engine-sim-app
+        discord
+        discord-rpc
+    )
+endif (DISCORD_ENABLED)
 
 # GTEST
 
