@@ -30,6 +30,7 @@ class Transmission {
         inline double getClutchPressure() const { return m_clutchPressure; }
         inline double* getGearRatios() const { return m_gearRatios; }
         inline int getGearCount() const { return m_gearCount; }
+        inline double getMaxClutchTorque() const { return m_maxClutchTorque; }
 
     protected:
         atg_scs::ClutchConstraint m_clutchConstraint;
