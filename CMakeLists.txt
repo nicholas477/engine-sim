@@ -140,7 +140,7 @@ target_link_libraries(engine-sim
     delta-basic)
 
 target_include_directories(engine-sim
-    PUBLIC dependencies/submodules)
+    PUBLIC dependencies/submodules include)
 	
 add_subdirectory(dependencies/submodules/simple-2d-constraint-solver)
 
